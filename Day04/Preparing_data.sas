@@ -1,0 +1,9 @@
+/* PROCESSING DATA */
+libname pg1 "/home/u64168920/EPG1V2/data";
+
+DATA STORM;
+	SET PG1.STORM_SUMMARY;
+	OBS=5;
+	where MaxWindMPH >=156 and StartDate >='01JAN2000'D;
+	KEEP SEASONE NAME BASIN MaxWindMPH;
+RUN;
