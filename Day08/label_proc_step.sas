@@ -34,3 +34,24 @@ proc print data=storm_sort;
 run;
 
 title;   /* Clears title */
+
+
+/* label */
+data cars_update;
+    set sashelp.cars;
+	keep Make Model MSRP Invoice AvgMPG;
+	AvgMPG=mean(MPG_Highway, MPG_City);
+	label MSRP="Manufacturer Suggested Retail Price"
+          AvgMPG="Average Miles per Gallon";
+run;
+
+/* proc mean */
+proc means data=cars_update min mean max;
+    var MSRP Invoice;
+run;
+
+
+/* proc print */
+proc print data=cars_update;
+    var Make Model MSRP Invoice AvgMPG;
+run;
