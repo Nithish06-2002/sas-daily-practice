@@ -1,4 +1,4 @@
-ods rtf file="/home/u64168920/pressur.rtf";
+ods rtf file="/home/u64168920/pressur.rtf"  STARTPAGE=NO;
 
 title "Minimum Pressure Statistics by Basin";
 ods noproctitle;
