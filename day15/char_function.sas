@@ -1,0 +1,51 @@
+********************************************************************************
+************************07/03/2026**********************************************
+;
+/* SUBSTR */
+DATA NITHI;
+SET SASHELP.DFTDICT;
+RUN;
+
+DATA K;
+SET NITHI;
+AGG=SUBSTR(LDESC,1,5);
+RUN;
+
+/* SCAN */
+VAR=SCAN(STRING,NO OF WORD);
+
+DATA L;
+SET NITHI;
+ASS=SCAN(ATTRCLAS,2);
+ADD=SCAN(ID,2);
+AFF=SCAN(ID,-2); /* ALTERNATE METHOD */
+RUN;
+
+/* INDEX */
+
+/* INDEX-->TO CHECK THE PATTERN IN A STRING */
+
+DATA P;
+SET NITHI;
+AGG=INDEX(CLASNAME,"ttr");
+RUN;
+
+/* INDEXC */
+
+VAR= INDEXC(STRING,"CHARACTER");
+/* WHICH IS FIRST IT GIVES THE POSITION OF IT */
+
+DATA O;
+SET NITHI;
+G=INDEXC(CLASNAME,"cR");
+run;
+
+
+/* INDEXW--> RO CHECK THE WORLD POSITION IN A STRING */
+
+VAR=INDEXW(STRING,"WORD");
+
+DATA T;
+SET NITHI;
+K=INDEXW(LDESC,"data");
+run;
