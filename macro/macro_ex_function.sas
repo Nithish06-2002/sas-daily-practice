@@ -1,0 +1,122 @@
+/* SAS FUNCTION */
+
+COMMONLY USED MACROS:
+
+%PUT:WRITS TEXT OR MACRO VARIABLE INFORMACTOIN TO THE SAS LOG.
+TO DISPLAY THE AUTOMATICALLY CREATED MACRO VARIABLES
+
+%PUT _AUTOMATIC_;
+TO DISPLAY MACRO VARIABLES DEFINED BY A USER
+
+%PUT _USER_;
+TO DISPLAY GLOBAL MACRO VARIABLES
+
+%PUT _GLOBAL_;
+TO DISPLAY LOCAL MACRO VARIABLE
+
+%PUT _LOCAL_;
+TO DISPLAY VALUE ASSIGNED TO MACRO VARIABLES
+
+
+SAS MACRO -FUNCTIONS
+%UPCASE():THIS FUNCTION IS USED TO CONVERT CASE OF LETTERS TO UPPERCASE
+SYNTAX:%UPCASE(ARGUMENT)
+
+%SUBSTR():THIS FUNCTION THE GIVEN NUMBER OF CHARACTER FROM
+SPECIFIED POSITION.
+
+SYNTAX:
+%SUBSTR(ARGUMENT,POSITION[NUMBER OF CHARACTERS])
+IF NUMBER OF CHARACTER IS NOT SUPPLIED ,%SUBSTR FUNCTIONWILL RETURN CHARACTER
+FROM GIVEN POSITION TILL END OF THE STRING.
+
+%SCAN():THIS FUNCTION WILL RETURN THE NTH WORD IN A STRING(HAVING
+N WORDS SEPARATED BY DELIMITERS.)
+
+SYNTAX:
+%SCAN(ARGUMENT,N[DELIMETER])
+IF WILL RETURN NULL VALUE, IF STRING DOES NOT HAVE N WORDS SEPERATED
+BY DELImiter and IF WE HAVR NOT GIVEN DELIMITER THEN IT WILL USE DEFAULT 
+VALUE FOR IT.
+DEFAULT DELIMITERS ARE BLANK,.(&!$*);-/%
+
+%EVAL();THIS FUNCTION IS USED TO PERFORM MATHAMTICAL AD LOGICAL OPERTION
+WITH MACRO VARIABLE.REMEMBER , MACRO VARIABLE 
+
+SYNTAX:- %EVAL(EXPRESSION)
+
+%SYSFUNC()
+THESE ARE SEVERAL USEFUL BASE SAS FUNCTION THAT ARE NOT DIRECTLY AVAILABLE IN MACRO,
+%SYSFUNC ENABLE THOSE FUNCTION TO MAKE THEM WORK IN A MACRO.
+
+SYNTAX: %SYSFUNC(FUNCTION(ARGUMENTS...)[FORMAT])
+IT HAS TWO ARGUMENTS , FIRST IS FOR THE FUNCTION AND SECONND IS OPTIONAL 
+TO FORMAT THE OUTOUT OS FUNTCION.
+
+%STR():THIS FUNCTION REMOVES/MASKS THE NORMAL MEANING OF FOLLOWING TOKEN
++-*/,<>=;"".IT ALSO PRESERVES LEADING AND TRAILING BLANKS OF THE STRING .
+
+SYNTAX:-%STR(ARGUMENT)
+
+********************************************************************
+%let x=20;
+%let y=5;
+%let z=%eval(&x*&y);
+
+%put &z;
+
+
+%let x=2;
+%let y=4;
+%let z=12;
+%let c=%eval((&x+&y)*&z);
+
+%put &c;
+
+
+/* sysevalf to calculate flooting values */
+%let x=20.32;
+%let y=5.43;
+%let z=%sysevalf(&x*&y);
+
+%put &z;
+
+/* str : it is used to remove the the meaning of special chaaracter*/
+%let x=10;
+%let y= %str(r&x ; nithish);
+
+%put &y;
+
+/*nrstr:Mask special characters and mnemonic operators in constant text at macro compilation.
+Unmatched quotation marks (" ")  and parentheses ( () )  must be marked with a preceding %.*/
+
+%let x=10;
+%let y= %nrstr(r&x ; nithish);
+
+%put &y;
+
+/* upcase */
+%let r=nithish;
+%let xy=%upcase(&r);
+
+%put &xy;
+
+
+/* lowcase */
+%let r=nithish;
+%let xy=%lowcase(&r);
+
+%put &xy;
+
+
+/* Scan */
+%let r=nithish shivaiah tumk;
+%let xy=%scan(&r,2);
+
+%put &xy;
+
+
+%let r=nithish shivaiah tumk;
+%let xy=%scan(&r,2);
+
+%put &xy;
