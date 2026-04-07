@@ -1,0 +1,172 @@
+/* AE DOMINE */
+PROC IMPORT DATAFILE="/home/u64168920/project_sdtm/Project SDTM-Adverse Event Raw data file.xlsx"
+OUT=AE
+DBMS=XLSX REPLACE;
+GETNAMES=YES;
+RUN;
+
+DATA AE1;
+SET AE;
+STUDYID=STRIP(STUDYID);
+DOMAIN="AE";
+SUBJID=STRIP(SUBJID);
+SITEID=STRIP(SITE);
+USUBJID=STRIP(STUDYID) || '-' ||STRIP(SITEID) || '-' ||STRIP(SUBJID);
+AETERM=UPCASE(STRIP(EVENT));
+AELLT=STRIP(LLT);
+AELLTCD=LLTCD;
+AEDECOD=UPCASE(STRIP(DECOD));
+AEPTCD=PTCD;
+AEHLT=UPCASE(STRIP(HLT));
+AEHLTCD=HLTCD;
+AEHLGT=UPCASE(STRIP(HLGT));
+AEHLGTCD=HLGTCD;
+AEBODSYS=upcase(BODSYS);
+AEBDSYSCD=BDSYCD;
+AESOC=UPCASE(SOC);
+AESOCCD=SOCCD;
+AESEV=UPCASE(STRIP(SEV));
+AESER=UPCASE(STRIP(SER));
+AEACN=UPCASE(STRIP(ACTT));
+AEACNOTH="";
+AEREL=UPCASE(STRIP(CAU));
+AEOUT=UPCASE(STRIP(OUTCOME));
+
+AESTDTC=PUT(STDT,IS8601DA.)||"T"||PUT(STTM,TOD8.);
+AESTDTCN=DATEPART(INPUT(AESTDTC,IS8601DT.));
+
+AEENDTC=PUT(STOPDT,IS8601DA.)||"T"||PUT(STOPTM,TOD8.);
+AEENDTCN=DATEPART(INPUT(AEENDTC,IS8601DT.));
+FORMAT AESTDTCN AEENDTCN DATE9.;
+RUN;
+
+/* DM DOMINE */
+PROC IMPORT DATAFILE="/home/u64168920/Project SDTM DM Raw datafile.xlsx"
+OUT=DM
+DBMS=XLSX REPLACE;
+GETNAMES=YES;
+QUIT;
+
+DATA DM1;
+SET DM;
+STUDYID=STRIP(STUDY);
+DOMAIN="DM";
+SUBJID=STRIP(SUBJID);
+SITEID=STRIP(SITE);
+USUBJID=STRIP(STUDYID) || '-' ||STRIP(SITEID) || '-' ||STRIP(SUBJID);
+ENRDTN=INPUT(ENTDT,MMDDYY10.);
+RFSTDTC=PUT(ENRDTN,IS8601DA.)||"T"||PUT(ENRTM,TOD8.);
+RFSTDTN=DATEPART(INPUT(RFSTDTC,IS8601DT.));
+KEEP SUBJID USUBJID RFSTDTN RFSTDTC;
+FORMAT RFSTDTN DATE9.;
+RUN;
+
+PROC SQL;
+CREATE TABLE AE_DM AS
+SELECT A.*, B.RFSTDTC,B.SUBJID, B.RFSTDTN
+FROM AE1 AS A
+INNER JOIN DM1 AS B
+ON A.SUBJID = B.SUBJID;
+QUIT;
+
+/* AESTDY */
+DATA AE2;
+SET AE_DM;
+IF NOT MISSING(AESTDTCN) AND NOT MISSING(RFSTDTN) THEN DO;
+IF AESTDTCN >= RFSTDTN then AESTDY = AESTDTCN - RFSTDTN +1;
+ELSE IF AESTDTCN < RFSTDTN THEN AESTDY = AESTDTCN - RFSTDTN;
+END;
+
+IF NOT MISSING(AEENDTCN) AND NOT MISSING(RFSTDTN) THEN DO;
+IF AEENDTCN >= RFSTDTN THEN AEENDY = AEENDTCN - RFSTDTN +1;
+ELSE IF AEENDTCN < RFSTDTN THEN AEENDY = AEENDTCN - RFSTDTN;
+END;
+
+AEDUR1 = AEENDY - AESTDY + 1;
+AEDUR = ("P"||PUT(AEDUR1,BEST.)||"D");
+AEDUR = COMPRESS(AEDUR);
+RUN;
+
+/* AESEQ */
+proc sort data=ae2;
+by USUBJID;
+run;
+
+data ae3;
+set ae2;
+by USUBJID;
+retain AESEQ;
+if first.USUBJID then AESEQ = 1;
+else AESEQ + 1;
+run;
+
+DATA AE_FINAL;
+SET AE3;
+KEEP STUDYID     
+DOMAIN      
+USUBJID     
+AESEQ       
+AETERM      
+AELLT       
+AELLTCD     
+AEDECOD     
+AEPTCD      
+AEHLT       
+AEHLTCD     
+AEHLGT      
+AEHLGTCD    
+AEBODSYS    
+AEBODSYS   
+AESOC       
+AESOCCD     
+AESEV       
+AESER       
+AEACN       
+AEACNOTH    
+AEREL       
+AEOUT       
+AESTDTC     
+AEENDTC     
+AESTDY      
+AEENDY      
+AEDUR       
+AESEQ ;
+RUN;       
+
+PROC SQL;
+	CREATE TABLE AE_FINAL1 AS SELECT STUDYID LABEL="Study Identifier" length=8, 
+		DOMAIN LABEL="Domain Abbreviation" length=2, USUBJID 
+		LABEL="Unique Subject Identifier" length=50, AESEQ LABEL="Sequence Number" 
+		length=8, AETERM LABEL="Reported term for Adverse Event" length=200, AELLT 
+		LABEL="Lowest Level Term" length=200, AELLTCD LABEL="Lowest Level Term code" 
+		length=8, AEDECOD LABEL="Dictionary-Derived Term" length=200, AEPTCD 
+		LABEL="Preferred Term Code" length=8, AEHLT LABEL="High Level Term" 
+		length=200, AEHLTCD LABEL="High Level Term Code" length=8, AEHLGT 
+		LABEL="High Level Group Term" length=200, AEHLGTCD 
+		LABEL="High Level Group Term Code" length=8, AEBODSYS 
+		LABEL="Body System or organ class" length=200, AEBODSYS 
+		LABEL="Body System or organ class code" length=8, AESOC 
+		LABEL="Primary System Organ class" length=200, AESOCCD 
+		LABEL="Primary System Organ class Code" length=8, AESEV 
+		LABEL="Severity/Intensity" length=10, AESER LABEL="Serious Event" length=2, 
+		AEACN LABEL="Action Taken with study Treatment" length=16, AEACNOTH 
+		LABEL="Other Action Taken" length=200, AEREL LABEL="Causality" length=20, 
+		AEOUT LABEL="Outcome of Adverse Event" length=40, AESTDTC 
+		LABEL="Start Date/Time of Adverse Event" length=20, AEENDTC 
+		LABEL="End Date/Time of Adverse Event" length=20, AESTDY 
+		LABEL="Study Day of Start of Adverse Event" length=8, AEENDY 
+		LABEL="Study Day of End of Adverse Event" length=8, AEDUR 
+		LABEL="Duration of Adverse Event" length=20 from AE_FINAL;
+quit;
+
+proc print data=AE_FINAL1 (firstobs=1 obs=5);
+run;
+
+libname xptout xport "/home/u64168920/project_sdtm/AE_OUT.xpt";
+
+data Xptout.AE_OUT;
+set AE_FINAL1;
+rename AEBDSYSCD = AEBDSCD;
+run;
+
+libname xptout clear;
