@@ -1,0 +1,412 @@
+================================================================================
+                    CLINICAL SAS PROGRAMMING PROJECT
+================================================================================
+
+Project Name        : SDTM VS Domain Creation & XPT Generation
+Domain              : Vital Signs (VS)
+Project Type        : Clinical SAS / CDISC SDTM Mapping
+Program Name        : vs_domain_creation.sas
+
+Programmer          : NITHISH M S
+Author              : Nithish M S
+Role                : Clinical SAS Programmer Trainee
+
+Study Standard      : CDISC SDTM
+Programming Tool    : SAS 9.4
+Output Format       : XPT Transport File (.xpt)
+
+Project Start Date  : 19-APR-2026
+Last Modified Date  : 09-MAY-2026
+Project Duration    : ~21 Days
+
+Source Data         : Raw VS & DM Excel Files
+Target Dataset      : VS_FINAL
+Export File         : VS.xpt
+
+Key Functionalities :
+- Raw clinical data import using PROC IMPORT
+- SDTM VS domain mapping
+- USUBJID derivation
+- ISO8601 date-time conversion
+- VSTESTCD / VSTEST derivation
+- PROC TRANSPOSE denormalization
+- VSORRES / VSSTRESC / VSSTRESN derivation
+- Baseline Flag (VSBLFL) derivation
+- Study Day (VSDY) derivation
+- Sequence Number (VSSEQ) derivation
+- Merge of DM and VS datasets
+- CDISC-compliant variable labeling
+- XPT transport file generation
+
+Datasets Used       :
+- VS
+- DM
+- VS1 / VS2 / VS3
+- VS4 / VS44 / VS444
+- FINAL_VS1
+- DM_VS
+- VS_FINAL
+
+Modification History:
+--------------------------------------------------------------------------------
+Version   Date          Modified By     Description
+--------------------------------------------------------------------------------
+1.0       19-APR-2026   Nithish M S    Initial project setup
+1.1       24-APR-2026   Nithish M S    Added PROC TRANSPOSE logic
+1.2       30-APR-2026   Nithish M S    Added VSSTRES derivations
+1.3       05-MAY-2026   Nithish M S    Added VSDY & VSSEQ derivation logic
+1.4       09-MAY-2026   Nithish M S    Final validation & XPT generation
+--------------------------------------------------------------------------------
+
+Project Objective:
+To transform raw clinical vital signs and demographic datasets into a
+CDISC SDTM-compliant VS domain using SAS programming techniques and generate
+submission-ready XPT transport files for clinical data standardization.
+
+================================================================================;
+
+/* IMPORT OF RAW VS DATASET */
+PROC IMPORT DATAFILE="/home/u64252598/OUTPUT_FILES/VA_POJ/Project SDTM VS Raw file.xlsx"
+OUT=VS
+DBMS=XLSX REPLACE;
+GETNAMES=YES;
+RUN;
+
+DATA VS;
+SET VS;
+IF SUBJID NE "";
+RUN;
+
+DATA VS1;
+SET VS;
+STUDYID=STRIP(STUDYID);
+DOMAIN="VS";
+SUBJID=STRIP(SUBJID);
+SITEID=STRIP(SITE);
+USUBJID=STRIP(STUDYID)||"-"||STRIP(SITEID)||"-"||STRIP(SUBJID);
+VSDTC=PUT(RECDT,IS8601DA.)||"T"||PUT(RECDTM,TOD8.);
+
+VSTPT=TP;
+IF VSTPT="Check-in" then VSTPTNUM=1;
+ELSE IF VSTPT="0" THEN VSTPTNUM=2;
+ELSE IF VSTPT="2" THEN VSTPTNUM=3;
+ELSE IF VSTPT="8" THEN VSTPTNUM=4;
+ELSE IF VSTPT="Check-out" THEN VSTPTNUM=5;
+
+IF VISIT="SCREENING" THEN VISITNUM=0;
+ELSE IF VISIT="PERIOD-1" THEN VISITNUM=1;
+ELSE IF VISIT="PERIOD-2" THEN VISITNUM=2;
+RUN;
+
+PROC SORT DATA=VS1 OUT=VS2;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC;
+RUN;
+
+PROC TRANSPOSE DATA=VS2 OUT=VS3;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC;
+VAR PULSE TEMP SYS DIA;
+RUN;
+
+DATA VS4;
+length VSTEST $ 200;
+SET VS3;
+length VSTESTCD $ 40;
+IF _NAME_="PULSE" THEN DO;VSTESTCD="PULSE";VSTEST="Pulse Rate";END;
+IF _NAME_="TEMP" THEN DO;VSTESTCD="TEMP";VSTEST="Temperature";END;
+IF _NAME_="SYS" THEN DO;VSTESTCD="SYSBP";VSTEST="Systolic Blood Pressure";END;
+IF _NAME_="DIA" THEN DO;VSTESTCD="DIABP";VSTEST="Diastolic Blood Pressure";END;
+run;
+
+DATA VS5;
+SET VS4;
+VSORRS=STRIP(COL1);
+DROP COL1 COL2 COL3 COL4;
+RUN;
+
+/* next variable */
+PROC TRANSPOSE DATA=VS2 OUT=VS33;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC;
+VAR PULSEU TEMPU SYSU DIAU;
+RUN;
+
+DATA VS44;
+LENGTH VSTEST $ 200;
+SET VS33;
+length VSTESTCD $ 40;
+IF _NAME_="PULSEU" THEN DO;VSTESTCD="PULSE";VSTEST="Pulse Rate";END;
+IF _NAME_="TEMPU" THEN DO;VSTESTCD="TEMP";VSTEST="Temperature";END;
+IF _NAME_="SYSU" THEN DO;VSTESTCD="SYSBP";VSTEST="Systolic Blood Pressure";END; 
+IF _NAME_="DIAU" THEN DO;VSTESTCD="DIABP";VSTEST="Diastolic Blood Pressure";END;
+VSORRESU=STRIP(COL1);
+DROP COL1 COL2 COL3 COL4;
+RUN;
+
+/* VSSTRESC VSSTRESN */
+PROC SORT DATA=VS1  OUT=VS2;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC;
+RUN;
+
+PROC TRANSPOSE DATA=VS2 OUT=VS333;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC;
+VAR PULSER TEMPR SYSR DIAR;
+RUN;
+
+data VS444;
+set VS333;
+length VSTESTCD $ 40;
+if _NAME_="PULSER" then do; VSTESTCD="PULSE"; VSTEST="Pulse Rate"; end;
+if _NAME_="TEMPR" then do; VSTESTCD="TEMP"; VSTEST="Temperature"; end;
+if _NAME_="SYSR" then do; VSTESTCD="SYSBP"; VSTEST="Systolic Blood Pressure"; end;
+if _NAME_="DIAR" then do; VSTESTCD="DIABP"; VSTEST="Diastolic Blood Pressure"; end;
+VSSTRESC = strip(COL1);
+if notdigit(VSSTRESC)=0 then 
+VSSTRESN = input(VSSTRESC, best.);
+else VSSTRESN = .;
+run;
+
+proc sort DATA=VS4;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC VSTESTCD;
+RUN;
+
+proc sort DATA=VS44;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC VSTESTCD;
+RUN;
+
+proc sort DATA=VS444;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC VSTESTCD;
+RUN;
+
+/* MERGE ALL THE DATASET */
+
+DATA FINAL;
+MERGE VS4 VS44 VS444;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC VSTESTCD;
+RUN;
+
+Data Final1;
+Set Final;
+IF VSTPT='0' Then VSBLFL='Y';
+VSSTDTN=DATEPART(INPUT(VSDTC,IS8601DT.));
+FORMAT VSSTDTN DATE9.;
+RUN;
+
+
+/* IMPORT DM RAW DATASET */
+PROC IMPORT DATAFILE="/home/u64252598/OUTPUT_FILES/VA_POJ/Project SDTM DM Raw datafile (1).xlsx"
+OUT=DM
+DBMS=XLSX REPLACE;
+GETNAMES=YES;
+RUN;
+
+DATA VS1_;
+SET DM;
+STUDYID=STRIP(STUDY);
+DOMAIN="DM";
+SITEID=STRIP(SITE);
+SUBJID=STRIP(SUBJID);
+USUBJID=COMPRESS(STUDYID||"-"||SITEID||"-"||SUBJID);
+ENRDTN=INPUT(ENTDT,MMDDYY10.);
+VSDTC=PUT(ENRDTN,IS8601DA.)||"T"||PUT(ENRTM,TOD8.);
+VSTPT="";
+IF VSTPT="Check-in" then VSTPTNUM=1;
+ELSE IF VSTPT="0" THEN VSTPTNUM=2;
+ELSE IF VSTPT="2" THEN VSTPTNUM=3;
+ELSE IF VSTPT="8" THEN VSTPTNUM=4;
+ELSE IF VSTPT="Check-out" THEN VSTPTNUM=5;
+
+IF VISIT="SCREENING" THEN VISITNUM=0;
+ELSE IF VISIT="PERIOD-1" THEN VISITNUM=1;
+ELSE IF VISIT="PERIOD-2" THEN VISITNUM=2;
+RUN;
+
+PROC SORT DATA=VS1_ OUT=VS2_;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC;
+RUN;
+
+/* TRANSPOSE DATASET BY DENORMALISATION*/
+
+PROC TRANSPOSE DATA=VS2_ OUT=VS3_ NAME=NAME;
+VAR HT WT BMI;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC;
+RUN;
+
+/* VSORRES */
+DATA VS4_;
+SET VS3_;
+LENGTH VSTEST$ 40;
+IF NAME="HT" THEN DO;VSTESTCD="HEIGHT";VSTEST="Height";END;
+IF NAME="WT" THEN DO;VSTESTCD="WEIGHT";VSTEST="Weight";END;
+IF NAME="BMI" THEN DO;VSTESTCD="BMI";VSTEST="Body Mass Index";END;
+VSORRES=STRIP(PUT(COL1,BEST.));
+VSSTRESC=VSORRES;
+VSSTRESN=COL1;
+DROP COL1 COL2 COL3 COL4 COL5 COL6 COL7 COL8 COL9;
+RUN;
+
+
+/* VSORRESU */
+PROC TRANSPOSE DATA=VS2_ OUT=VS33_ NAME=NAME;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC;
+VAR HTU WTU BMIU;
+RUN;
+
+DATA VS44_;
+SET VS33_;
+LENGTH VSTEST$ 40;
+IF NAME="HTU" THEN DO;VSTESTCD="HEIGHT";VSTEST="Height";END;
+IF NAME="WTU" THEN DO;VSTESTCD="WEIGHT";VSTEST="Weight";END;
+IF NAME="BMIU" THEN DO;VSTESTCD="BMI";VSTEST="Body Mass Index";END;
+
+VSORRESU=STRIP(COL1);
+VSSTRESU=VSORRESU;
+DROP COL1 COL2 COL3 COL4 COL5 COL6 COL7 COL8 COL9;
+RUN;
+
+PROC SORT DATA=VS4_;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC VSTESTCD;
+RUN;
+
+PROC SORT DATA=VS44_;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC VSTESTCD;
+RUN;
+
+/* MERGE BOTH THE DATASET */
+
+DATA FINAL_DEMOG;
+MERGE VS4_ VS44_;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC VSTESTCD; 
+RUN;
+
+DATA FINAL_DEMOG;
+SET FINAL_DEMOG;
+IF _N_ > 3;
+RUN;
+
+DATA FINAL_DEMOG2;
+SET FINAL_DEMOG;
+IF VISIT="0" THEN VSBLFL="Y";
+VSSTDTN=DATEPART(INPUT(VSDTC,IS8601DT.));
+FORMAT VSSTDTN DATE9.;
+RUN;
+
+DATA FINAL_VS1;
+SET Final1 FINAL_DEMOG2;
+RUN;
+
+/* COMBINE BOTH THE DATASET */
+
+PROC IMPORT DATAFILE="/home/u64252598/OUTPUT_FILES/VA_POJ/Project SDTM DM Raw datafile (1).xlsx"
+OUT=DM
+DBMS=XLSX REPLACE;
+GETNAMES=YES;
+RUN;
+
+DATA DM1;
+SET DM;
+STUDYID=STRIP(STUDY);
+DOMAIN="DM";
+SUBJID=STRIP(SUBJID);
+SITEID=STRIP(SITE);
+USUBJID=COMPRESS(STUDYID||"-"||SITEID||"-"||SUBJID);
+FORMAT ENTDT DATE9.;
+RFSTDTC=PUT(ENTDT,ISO8601DA.)||"T"||PUT(ENRTM,TOD8.);
+RUN;
+
+DATA DM2;
+SET DM1;
+date_part = SCAN(RFSTDTC,1,'T');
+RFSTDTN = INPUT(date_part, MMDDYY10.);
+FORMAT RFSTDTN DATE9.;
+KEEP USUBJID RFSTDTC RFSTDTN;
+RUN;
+
+PROC SORT DATA=DM2 NODUPKEY out=DM3;
+BY USUBJID;
+QUIT;
+
+PROC SORT DATA=FINAL_VS1 OUT=FINAL_VS2;
+BY USUBJID;
+QUIT;
+
+DATA DM_VS;
+MERGE DM3(IN=A) FINAL_VS2(IN=B);
+BY USUBJID;
+IF A AND B;
+RUN;
+
+/* VSDY */
+DATA DM_VS2;
+SET DM_VS;
+IF not missing(VSSTDTN) AND not missing(RFSTDTN) THEN DO; 
+IF VSSTDTN>=RFSTDTN THEN VSDY=VSSTDTN-RFSTDTN + 1;
+ELSE IF VSSTDTN<RFSTDTN THEN VSDY=VSSTDTN-RFSTDTN;
+END;
+RUN;
+
+DATA DM_VS3;
+SET DM_VS2;
+BY STUDYID DOMAIN USUBJID VISITNUM VISIT VSTPTNUM VSTPT VSDTC VSTESTCD;
+IF FIRST.USUBJID THEN VSSEQ=1;
+ELSE VSSEQ+1;
+RUN;
+
+DATA FINAL;
+SET DM_VS3;
+DOMAIN="VS";
+RUN;
+
+DATA FINAL1;
+SET FINAL;
+KEEP STUDYID
+DOMAIN
+USUBJID
+VSSEQ
+VSTESTCD
+VSTEST
+VSORRES
+VSORRESU
+VSSTRESC
+VSSTRESN
+VSSTRESU
+VSBLFL
+VISITNUM
+VSDTC
+VSDY
+VSTPT
+VSTPTNUM;
+RUN;
+
+PROC SQL;
+CREATE TABLE VS_FINAL AS 
+SELECT
+STUDYID  'Study Identifier'                         LENGTH=8 ,
+DOMAIN   'Domain Abbreviation'                      LENGTH=2 ,
+USUBJID  'Unique Subject Identifier'                LENGTH=50 ,
+VSSEQ    'Sequence Number'                          LENGTH=8 ,
+VSTESTCD 'Vital Signs Test Short Name'              LENGTH=8 ,
+VSTEST   'Vital Signs Test Name'                    LENGTH=40 ,
+VSORRES  'Result or Finding in original units'      LENGTH=200 ,
+VSORRESU 'Original Units'                           LENGTH=40 ,
+VSSTRESC 'Character Result/Finding in Std Format'   LENGTH=200 ,
+VSSTRESN 'Numeric Result/Finding in Standard Units' LENGTH=8 ,
+VSSTRESU 'Standard Units'                           LENGTH=40 ,
+VSBLFL   'Baseline Flag'                            LENGTH=8 ,
+VISITNUM 'Visit Number'                             LENGTH=8 ,
+VSDTC    'Date/Time of Measurements	'               LENGTH=25 ,
+VSDY     'Study Day of Vital Signs'                 LENGTH=8 ,
+VSTPT    'Planned Time Point Name'                  LENGTH=40 ,
+VSTPTNUM 'Planned Time Point Number'                LENGTH=8 
+FROM FINAL1;
+QUIT;
+
+
+PROC PRINT DATA=VS_FINAL (FIRSTOBS=1 OBS=10);
+RUN;
+
+LIBNAME XPTOUT XPORT "/home/u64252598/OUTPUT_FILES/VA_POJ/VS.xpt";
+
+data XPTOUT.VS;
+SET VS_FINAL;
+RUN;
+
+
