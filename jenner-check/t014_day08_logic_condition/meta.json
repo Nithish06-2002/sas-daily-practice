@@ -1,0 +1,8 @@
+{
+  "bundle": "t014_day08_logic_condition",
+  "source_file": "Day08/logic_condition.sas",
+  "source_blob_sha": "7793476f94240be0ce56acccb9b3802312ca9874",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 08 ocean classifier (uses 2nd char of basin code to assign Indian/Atlantic/Pacific). Inline storm_summary stand-in (15 named storms across NA/EP/WP/NI/SI/SP). The IF/ELSE logic is verbatim from upstream's first version, dropped the duplicated second copy."
+}

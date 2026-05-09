@@ -1,0 +1,8 @@
+{
+  "bundle": "t009_basic_datastep_proc",
+  "source_file": "basic_sas_datastep_proc.sas",
+  "source_blob_sha": "851c082e83baec71cd39ff72b0cd25ec37bf70d1",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Top-level basic_sas_datastep_proc.sas. Skipped the PROC IMPORT step that reads a SAS Studio Coursera CSV path (no equivalent file in the repo) and the var _character_/_numeric_ subset prints; kept the inline DATALINES dataset, DROP/KEEP example, and dataset label example."
+}

@@ -1,0 +1,8 @@
+{
+  "bundle": "t013_day08_if_then_do",
+  "source_file": "Day08/if_then_do.sas",
+  "source_blob_sha": "d285cebea5e044ed9138b3de9ba5b04e1e04ec10",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 08 IF/THEN/ELSE and IF/THEN/DO with multi-output. Built a small inline np_summary-like dataset (14 rows covering NP/NM/NPRE/PRE/NS/RVR/RIVERWAYS types). Logic kept verbatim from upstream."
+}

@@ -1,0 +1,8 @@
+{
+  "bundle": "t003_day12_proc_sort",
+  "source_file": "day12/proc_sort.sas",
+  "source_blob_sha": "d7f1270a71acf15e2e81c07e012d00397d6b5d08",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 12 PROC PRINT/CONTENTS/SORT with FIRST./LAST. and a simple PROC TABULATE on sashelp.class. Skipped the var _numeric_ / _character_ subsets and PROC COMPARE against sashelp.classfit since they are aside from the main lesson; kept the sort+nodup+by-group flow as written."
+}

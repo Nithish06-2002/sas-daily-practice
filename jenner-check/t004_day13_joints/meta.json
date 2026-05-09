@@ -1,0 +1,8 @@
+{
+  "bundle": "t004_day13_joints",
+  "source_file": "day13/joints.sas",
+  "source_blob_sha": "de2dc7567a3d49b5414948d34be614c2ef99bf74",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 13 join-by-MERGE pattern. Substituted an inline classfit_local dataset (name + predict + lower + upper) since this Jenner build doesn't ship sashelp.classfit, then ran the same full/inner/left/right join structure as the original. Names chosen to overlap sashelp.class so the inner join is non-empty."
+}

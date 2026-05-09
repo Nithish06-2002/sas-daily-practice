@@ -1,0 +1,8 @@
+{
+  "bundle": "t002_day12_proc_means",
+  "source_file": "day12/proc_means_ex.sas",
+  "source_blob_sha": "688f72af039bcbcb6e6fd610454c019388c0ac13",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 12 PROC MEANS practice. Uses sashelp.class and sashelp.cars (built-in). Removed two redundant by-make MEANS calls; kept the basic stats, output dataset, cars statistics, class-by-type, and MPG by type."
+}
