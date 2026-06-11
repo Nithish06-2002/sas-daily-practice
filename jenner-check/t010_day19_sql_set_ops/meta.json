@@ -1,0 +1,8 @@
+{
+  "bundle": "t010_day19_sql_set_ops",
+  "source_file": "day19 /sql_joint.sas",
+  "source_blob_sha": "a97c95b54353fc7abffd5b9d77de6260af414613",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 19 PROC SQL set operators. Three small DATALINES tables (patients/treatment/adverse) drive UNION ALL, INTERSECT, and EXCEPT examples. Skipped the deduplicating UNION case in the original (the two tables have different column counts, which the strict planner rejects); kept UNION ALL which matches the spirit of the lesson."
+}

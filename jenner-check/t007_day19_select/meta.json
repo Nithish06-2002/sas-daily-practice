@@ -1,0 +1,8 @@
+{
+  "bundle": "t007_day19_select",
+  "source_file": "day19 /SELECT.sas",
+  "source_blob_sha": "a93f96783e11e85fb02ef898163bd903684aaadf",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 19 SELECT/WHEN/OTHERWISE on sashelp.class age. Added a PROC PRINT at the end so the output is visible."
+}

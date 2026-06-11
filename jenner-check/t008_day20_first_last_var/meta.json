@@ -1,0 +1,8 @@
+{
+  "bundle": "t008_day20_first_last_var",
+  "source_file": "day 20/first.var and last.var.sas",
+  "source_blob_sha": "3cc7f45e5fd99fd967beca019ebb94c66ab667f7",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 20 FIRST./LAST. BY-group processing on sashelp.class. Stripped the long inline first.age/last.age table comment; the four DATA steps run as written and each has its own PROC PRINT."
+}

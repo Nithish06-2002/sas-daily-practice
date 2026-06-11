@@ -1,0 +1,8 @@
+{
+  "bundle": "t005_day13_macro_ex",
+  "source_file": "day13/macro_ex.sas",
+  "source_blob_sha": "e628ad3d7e03c5feeb47dda6fbdcfd3746a23189",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 13 macro practice. Wraps PROC MEANS in a parameterized %macro and calls it twice for MPG_City and MPG_Highway against sashelp.cars. Verbatim from upstream."
+}

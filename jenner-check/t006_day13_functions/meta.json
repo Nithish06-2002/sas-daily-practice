@@ -1,0 +1,8 @@
+{
+  "bundle": "t006_day13_functions",
+  "source_file": "day13/Functions.sas",
+  "source_blob_sha": "b7b65ef10bd187f89ea14bbc422b8057d1b8f8cc",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 13 character/numeric/date/automatic-variable function showcase against sashelp.cars. Verbatim DATA step plus a small PROC PRINT(obs=5) at the end."
+}

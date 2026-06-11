@@ -1,0 +1,8 @@
+{
+  "bundle": "t012_day15_sum_statement",
+  "source_file": "day15/Sum_statment.sas",
+  "source_blob_sha": "1715f76c1fb97fa003804d8b4ce642660b1ebd68",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 15 SUM statement (accumulator). Two examples: inline DATALINES with a missing first value, and a cumulative AGE on sashelp.class. Stripped the free-text comments at the top, added titles + PROC PRINT for each output."
+}

@@ -1,0 +1,21 @@
+{
+    "_captured_at": "2026-05-10T04:43:00Z",
+    "_captured_run_id": "r_019e0e9e1a8a72418e29255ec914ad38",
+    "status": "ok",
+    "exit_code": 0,
+    "log_contains": [
+        "NOTE: Option OBS changed to 100.",
+        "NOTE: DATA all_functions",
+        "NOTE: Read 12 rows from sashelp.cars.",
+        "NOTE: Wrote all_functions (12 rows, 53 columns).",
+        "NOTE: PROC PRINT completed: 5 observations printed, 53 variables"
+    ],
+    "log_does_not_contain": [
+        "ERROR:",
+        "[JENNER-ERROR"
+    ],
+    "diagnostics": {
+        "parse_warnings": [],
+        "runtime_warnings": []
+    }
+}

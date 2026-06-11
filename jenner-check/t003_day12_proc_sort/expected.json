@@ -1,0 +1,24 @@
+{
+    "_captured_at": "2026-05-10T04:35:00Z",
+    "_captured_run_id": "r_019e0e9c24597ba1b645eb220071603e",
+    "status": "ok",
+    "exit_code": 0,
+    "log_contains": [
+        "NOTE: Option OBS changed to 100.",
+        "NOTE: PROC PRINT completed: 19 observations printed",
+        "NOTE: PROC CONTENTS completed: 19 observations, 5 variables",
+        "NOTE: Wrote sorted_class (19 rows, 5 columns).",
+        "NOTE: 13 duplicate observations were deleted.",
+        "NOTE: Wrote first_age (6 rows, 5 columns).",
+        "NOTE: Wrote last_age (6 rows, 5 columns).",
+        "NOTE: Wrote unique_age (1 rows, 5 columns)."
+    ],
+    "log_does_not_contain": [
+        "ERROR:",
+        "[JENNER-ERROR"
+    ],
+    "diagnostics": {
+        "parse_warnings": [],
+        "runtime_warnings": []
+    }
+}

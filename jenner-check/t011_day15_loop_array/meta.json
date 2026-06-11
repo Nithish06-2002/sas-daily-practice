@@ -1,0 +1,8 @@
+{
+  "bundle": "t011_day15_loop_array",
+  "source_file": "day15/loop_array.sas",
+  "source_blob_sha": "70127628b016647b687f040114600811a7f9434c",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Day 15 DO-loop and ARRAY practice. Kept the iterative DO with BY step, the visit counter, the visit{5} array fill, and the x(3) array. Renamed K to visits to avoid the duplicate dataset name in the original. Each step has a PROC PRINT for visibility."
+}

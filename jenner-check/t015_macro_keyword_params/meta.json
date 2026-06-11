@@ -1,0 +1,8 @@
+{
+  "bundle": "t015_macro_keyword_params",
+  "source_file": "macro/macro_part01.sas",
+  "source_blob_sha": "b2ae5d76bb83c4d2938ef5ff66b341621d7331f5",
+  "source_commit": "93b3be45614e3e7c653e933f3e398db65a4c2aa3",
+  "tier": "real_data",
+  "notes": "Macro lesson - keyword vs positional parameters. Extracted the two parameterized macros (%print and %sub) from upstream and called them against sashelp.class / sashelp.cars. Skipped the free-form lesson notes in the upstream file."
+}
