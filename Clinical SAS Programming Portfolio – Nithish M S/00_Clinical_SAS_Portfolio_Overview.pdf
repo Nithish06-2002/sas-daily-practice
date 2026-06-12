@@ -1,0 +1,228 @@
+Clinical SAS Programming Portfolio
+
+Nithish M S
+
+Clinical SAS Programmer | CDISC SDTM | ADaM | TLF Programming
+⸻
+Professional Summary
+
+Motivated Clinical SAS Programmer with hands-on experience in developing CDISC-compliant SDTM and ADaM datasets, generating TLF outputs, and creating submission-ready XPT files using SAS 9.4. This portfolio demonstrates practical project work completed through independent learning, project development, and Clinical SAS training.
+
+Core competencies include Clinical Data Mapping, SDTM Domain Development, ADaM Dataset Creation, TLF Programming, PROC SQL, PROC REPORT, PROC TRANSPOSE, PROC SUMMARY, Data Validation, and XPT Generation.
+⸻
+Technical Skills
+
+Programming
+
+* SAS 9.4
+* PROC SQL
+* DATA Step Programming
+* PROC REPORT
+* PROC TRANSPOSE
+* PROC SUMMARY
+* PROC FREQ
+* PROC MEANS
+
+Clinical Standards
+* CDISC SDTM
+* CDISC ADaM
+* TLF Programming
+* XPT Generation
+
+Domains Developed
+
+* DM (Demographics)
+* AE (Adverse Events)
+* EX (Exposure)
+* VS (Vital Signs)
+* SUPPDM (Supplemental Qualifiers)
+
+ADaM Datasets Developed
+
+* ADSL (Subject-Level Analysis Dataset)
+* ADEG (ECG Analysis Dataset)
+
+⸻
+
+Portfolio Projects
+
+1. SDTM DM Domain Development
+
+Objective
+
+Transform raw demographic data into a CDISC SDTM-compliant DM dataset.
+
+Key Features
+
+* USUBJID derivation
+* ISO8601 date conversion
+* Subject demographic mapping
+* SDTM variable labeling
+* XPT generation
+
+⸻
+
+2. SDTM SUPPDM Domain Development
+
+Objective
+
+Develop Supplemental Qualifier dataset for Demographics.
+
+Key Features
+
+* Supplemental variable derivation
+* QNAM, QLABEL, QVAL mapping
+* SDTM-compliant structure
+* XPT generation
+
+⸻
+
+3. SDTM AE Domain Development
+
+Objective
+
+Create SDTM Adverse Event dataset from raw AE data.
+
+Key Features
+
+* AE mapping
+* Study day derivations
+* AESEQ generation
+* ISO8601 date handling
+* XPT generation
+
+⸻
+
+4. SDTM EX Domain Development
+
+Objective
+
+Develop SDTM Exposure dataset.
+
+Key Features
+
+* Exposure mapping
+* EXSTDY and EXENDY derivation
+* Exposure duration calculations
+* Sequence generation
+* XPT generation
+
+⸻
+
+5. SDTM VS Domain Development
+
+Objective
+
+Create SDTM Vital Signs dataset.
+
+Key Features
+
+* Vital signs mapping
+* Baseline flag derivation
+* Study day derivation
+* PROC TRANSPOSE implementation
+* Submission-ready XPT output
+
+⸻
+
+6. ADaM ADSL Dataset Development
+
+Objective
+
+Develop Subject-Level Analysis Dataset (ADSL).
+
+Key Features
+
+* ENRLFL derivation
+* SAFFL derivation
+* TRTSDT/TRTEDT derivation
+* CONSDY derivation
+* AGEGR1 derivation
+* XPT generation
+
+⸻
+
+7. ADaM ADEG Dataset Development
+
+Objective
+
+Develop ECG Analysis Dataset (ADEG).
+
+Key Features
+
+* EG and SUPPEG integration
+* AVAL derivation
+* ADT and ATM derivation
+* AVISIT and AVISITN derivation
+* Baseline flag implementation
+* Submission-ready XPT generation
+
+⸻
+
+8. TLF Demographic Summary Table
+
+Objective
+
+Generate treatment-wise demographic summary tables.
+
+Key Features
+
+* Summary statistics
+* Categorical analysis
+* PROC REPORT
+* PROC SUMMARY
+* Clinical reporting outputs
+
+⸻
+
+9. TLF Subject Demographics Report
+
+Objective
+
+Generate demographic reporting outputs for clinical studies.
+
+Key Features
+
+* Treatment comparison
+* Statistical summaries
+* Report generation
+* Clinical reporting standards
+
+⸻
+
+10. TLF Vital Signs Listing
+
+Objective
+
+Generate subject-level Vital Signs listings.
+
+Key Features
+
+* Listing creation
+* PROC REPORT implementation
+* Clinical data presentation
+* Formatted reporting output
+
+⸻
+
+Skills Demonstrated Across Projects
+
+* Clinical SAS Programming
+* CDISC SDTM Standards
+* CDISC ADaM Standards
+* TLF Programming
+* Dataset Mapping
+* Variable Derivation
+* Data Validation
+* Clinical Reporting
+* PROC SQL
+* PROC REPORT
+* PROC TRANSPOSE
+* PROC SUMMARY
+* XPT Transport File Generation
+
+⸻
+
+Portfolio Access
+
+Full project documentation, source code, outputs, and supporting materials are available in the accompanying Clinical SAS Programming Portfolio repository.
